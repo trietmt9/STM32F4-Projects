@@ -2,10 +2,15 @@
 
 #define GPIOAEN         (1U << 0UL)
 #define USART2EN        (1U << 17UL) // write 1 to bit 17 to Enable USART2
-#define SYS_FREQ        16000000UL // Default system clock  
 
+#define UART_TE         (1U << 3UL)
+#define UART_EN         (1U << 13UL) // Enable UART module
+
+#define SYS_FREQ        16000000UL // Default system clock  
 #define APB1_CLK        SYS_FREQ
 #define UART_BAUDRATE   115200 
+
+
 
 static void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrat);
 static uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate);
@@ -26,12 +31,18 @@ void USART2_TX_INIT(void)
         GPIOA->AFR[0] &=~(1U << 31UL);
         
     /********** Config UART/USART module **********/
-        /*Config UART baudrate*/
+        /*Config UART CLock/
         RCC->APB1ENR |= USART2EN; 
+
+        /*Config UART baudrate*/
+        
         uart_set_baudrate(USART2, APB1_CLK, UART_BAUDRATE);
         
         /*Config the transfer direction*/
+        USART2->CR1 = UART_TE;
+
         /*Enable UART module*/
+        USART2->CR1 |= UART_EN;
 
 }
 static void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrat)
