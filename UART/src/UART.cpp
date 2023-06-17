@@ -1,8 +1,14 @@
 #include <stm32f446xx.h>
 
-#define GPIOAEN (1U << 0UL)
-#define USART2EN (1U << 17UL) // write 1 to bit 17 to Enable USART2
+#define GPIOAEN         (1U << 0UL)
+#define USART2EN        (1U << 17UL) // write 1 to bit 17 to Enable USART2
+#define SYS_FREQ        16000000UL // Default system clock  
 
+#define APB1_CLK        SYS_FREQ
+#define UART_BAUDRATE   115200 
+
+static void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrat);
+static uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate);
 void USART2_TX_INIT(void)
 {
     /********** Config UART/USART GPIO pin **********/
@@ -22,7 +28,8 @@ void USART2_TX_INIT(void)
     /********** Config UART/USART module **********/
         /*Config UART baudrate*/
         RCC->APB1ENR |= USART2EN; 
-
+        uart_set_baudrate(USART2, APB1_CLK, UART_BAUDRATE);
+        
         /*Config the transfer direction*/
         /*Enable UART module*/
 
