@@ -2,6 +2,7 @@
 
 #define GPIOAEN     (1U << 0UL)
 #define ADC1EN      (1U << 8UL) // Enable ADC1 module
+#define ADC_CH1     (1U << 0L) // Select channel 1 
 
 void PA1_ADC_INIT()
 {
