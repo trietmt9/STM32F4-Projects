@@ -38,6 +38,11 @@ int main()
             GPIOA->BSRR |= (LED_PIN << 16UL);
             uart_write_string("LED is off\n\r");
         }
+        else if(input == '3')
+        {
+            GPIOA->ODR ^= LED_PIN;
+            uart_write_string("LED is toggled\n\r");
+        }
         
     }
 }
