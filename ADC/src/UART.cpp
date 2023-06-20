@@ -14,25 +14,13 @@
 #define APB1_CLK        SYS_FREQ
 // #define UART_BAUDRATE   9600 
 
-
-class UART
-{
-    public:
-    uint32_t USART2_INIT(uint32_t baudRate);
-    char uart_read(void);
-    void uart_write(int data);
-    void uart_write_string(const char *str);
-
-};
-
-
 // void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrate);
 // uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate);
 // void uart_write(int data);
 // void uart_write_string(const char *str);
 // char uart_read(void);
 
-uint32_t UART::USART2_INIT(uint32_t baudRate)
+void UART::USART2_INIT(uint32_t baudRate)
 {
     /********** Config UART/USART GPIO pin **********/
         /*Enable clock access to GPIOA*/ 
@@ -63,7 +51,8 @@ uint32_t UART::USART2_INIT(uint32_t baudRate)
         RCC->APB1ENR |= USART2EN; 
 
         /*Config UART baudrate*/
-        uart_set_baudrate(USART2, APB1_CLK, baudRate);
+        // uart_set_baudrate(USART2, APB1_CLK, baudRate);
+        USART2->BRR = ((APB1_CLK + (baudRate/2U))/baudRate);
         
         /*Config the transfer direction*/
         USART2->CR1 = (UART_TE | UART_RE);
@@ -103,12 +92,12 @@ void UART::uart_write_string(const char *str)
     }
 }
 
-void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrate)
-{
-    UARTx->BRR = uart_div_compute(PeripherialCLK, Baudrate);
+// void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrate)
+// {
+//      uart_div_compute(PeripherialCLK, Baudrate);
 
-}
-uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate)
-{
-    return ((PeripherialCLK + (Baudrate/2U))/Baudrate); 
-}
+// }
+// uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate)
+// {
+//     return ; 
+// }

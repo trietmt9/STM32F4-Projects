@@ -8,11 +8,10 @@
 class UART
 {
     public:
-    uint32_t USART2_INIT(uint32_t baudRate);
+    void USART2_INIT(uint32_t baudRate);
     char uart_read(void);
     void uart_write(int data);
     void uart_write_string(const char *str);
 
 };
-
 #endif
