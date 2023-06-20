@@ -19,9 +19,7 @@ int main()
         char buffer[16]; 
         adc_conversion();
         sensor_value = adc_read();
-  
         sprintf(buffer, "ADC value: %hu\n",sensor_value);
-        // Serial.uart_write_string(buffer);
-
+        Serial.uart_write_string(buffer);
     }
 }
