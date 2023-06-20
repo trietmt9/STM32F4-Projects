@@ -9,7 +9,7 @@
 
 
 char input;
-
+UART Serial;
 int main()
 {
 
@@ -21,27 +21,27 @@ int main()
     GPIOA->MODER &=~(1U << 11UL);
 
 
-    USART2_INIT();
+    Serial.USART2_INIT(9600);
 
 
     while(1)
     {
 
-        input = uart_read();
+        input = Serial.uart_read();
         if(input == '1')
         {
             GPIOA->BSRR |= LED_PIN;
-            uart_write_string("LED is on\n\r");
+            Serial.uart_write_string("LED is on\n\r");
         }
         else if(input == '2')
         {
             GPIOA->BSRR |= (LED_PIN << 16UL);
-            uart_write_string("LED is off\n\r");
+            Serial.uart_write_string("LED is off\n\r");
         }
         else if(input == '3')
         {
             GPIOA->ODR ^= LED_PIN;
-            uart_write_string("LED is toggled\n\r");
+            Serial.uart_write_string("LED is toggled\n\r");
         }
         
     }
