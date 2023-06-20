@@ -12,23 +12,27 @@
 
 #define SYS_FREQ        16000000UL   // Default system clock  
 #define APB1_CLK        SYS_FREQ
-#define UART_BAUDRATE   9600 
+// #define UART_BAUDRATE   9600 
 
 
-
-void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrate);
-uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate);
-void uart_write(int data);
-void uart_write_string(const char *str);
-char uart_read(void);
-
-int __io_putchar(int data)
+class UART
 {
-    uart_write(data);
-    return data;
-}
+    public:
+    uint32_t USART2_INIT(uint32_t baudRate);
+    char uart_read(void);
+    void uart_write(int data);
+    void uart_write_string(const char *str);
 
-void USART2_INIT(void)
+};
+
+
+// void uart_set_baudrate(USART_TypeDef *UARTx,uint32_t PeripherialCLK, uint32_t Baudrate);
+// uint16_t uart_div_compute(uint32_t PeripherialCLK, uint32_t Baudrate);
+// void uart_write(int data);
+// void uart_write_string(const char *str);
+// char uart_read(void);
+
+uint32_t UART::USART2_INIT(uint32_t baudRate)
 {
     /********** Config UART/USART GPIO pin **********/
         /*Enable clock access to GPIOA*/ 
@@ -59,7 +63,7 @@ void USART2_INIT(void)
         RCC->APB1ENR |= USART2EN; 
 
         /*Config UART baudrate*/
-        uart_set_baudrate(USART2, APB1_CLK, UART_BAUDRATE);
+        uart_set_baudrate(USART2, APB1_CLK, baudRate);
         
         /*Config the transfer direction*/
         USART2->CR1 = (UART_TE | UART_RE);
@@ -70,7 +74,7 @@ void USART2_INIT(void)
 
 }
 
-char uart_read(void)
+char UART::uart_read(void)
 {
     /*Make sure receive data registor is not empty*/
     while(!(USART2->SR & SR_RXNE)){}
@@ -82,7 +86,7 @@ char uart_read(void)
 
 }
 
-void uart_write(int data)
+void UART::uart_write(int data)
 {
     /*Make sure transmit data registor is empty*/
     while(!(USART2->SR & SR_TXE)){}
@@ -92,7 +96,7 @@ void uart_write(int data)
 
 }
 
-void uart_write_string(const char *str)
+void UART::uart_write_string(const char *str)
 {
     while (*str != '\0') {
     uart_write(*str++);

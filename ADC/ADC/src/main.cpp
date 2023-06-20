@@ -5,18 +5,19 @@
 #include <ADC.h>
 
 uint32_t sensor_value; 
+UART Serial;
 
 int main()
 {   
-    USART2_INIT();
+    Serial.USART2_INIT(9600);
     PA1_ADC_INIT();
     adc_conversion();
 
     while(1)
     {   
         sensor_value = adc_read();
-        uart_write_string("Sensor value: ");
-        uart_write(sensor_value);
+        Serial.uart_write_string("Sensor value: ");
+        Serial.uart_write(sensor_value);
 
     }
 }
