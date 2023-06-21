@@ -3,8 +3,13 @@
 #include <stm32f446xx.h>
 #include <stdint.h> 
 
-void PA1_ADC_INIT();
-void adc_conversion();
-uint32_t adc_read(void);
+class adc
+{
+    public: 
+    void ADC1_INIT();
+    void conversion();
+    uint32_t read(void);   
+};
+
 
 #endif

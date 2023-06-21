@@ -6,16 +6,17 @@
 #define ADC_CH1         (1U << 0L) // Select channel 1 
 #define ADC_SEQ_LEN_1       0x00
 #define ADC_CR2_ON      (1U << 0UL)
+#define ADC_CR2_CONT    (1U << 1UL)
 
 #define ADC_SR_EOC      (1U << 1UL)
 
 #define ADC_SWSTART  (1U << 30UL) // Enable conversion of regular channel
 
-void PA1_ADC_INIT();
-void adc_conversion();
-uint32_t adc_read(void);
+// void PA1_ADC_INIT();
+// void adc_conversion();
+// uint32_t adc_read(void);
 
-void PA1_ADC_INIT()
+void adc::ADC1_INIT()
 {
     /********** Config ADC GPIO pin **********/
     /*Enable clock access to GPIOA*/
@@ -39,14 +40,17 @@ void PA1_ADC_INIT()
     ADC1->CR2 |= ADC_CR2_ON;
 } 
 
-void adc_conversion()
+void adc::conversion()
 {
+    /*Enable continuous conversion*/
+    ADC1->CR2 |= ADC_CR2_CONT;
     /*Start ADC conversion*/
     ADC1->CR2 |= ADC_SWSTART; 
 
+
 }
 
-uint32_t adc_read(void)
+uint32_t adc::read(void)
 {
     /*Wait for conversion completed*/
     while(!(ADC1->SR & ADC_SR_EOC)){}
