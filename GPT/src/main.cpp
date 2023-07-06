@@ -11,25 +11,28 @@ UART Serial;
 
 int main()
 {
-    RCC->AHB1ENR |= GPIOAEN;
+    /*======== Normal timer setup ========*/
+    // RCC->AHB1ENR |= GPIOAEN;
     
-    GPIOA->MODER |= (1U << 10UL);
-    GPIOA->MODER &= ~(1U << 11UL);
+    // GPIOA->MODER |= (1U << 10UL);
+    // GPIOA->MODER &= ~(1U << 11UL);
 
-    Serial.USART2_INIT(115200);
-    Timer.init();
+    // Serial.USART2_INIT(115200);
+    // Timer.init();
+
+/*======== Output Compare timer setup ========*/
+    Timer.OutputCompare();
 
     while (1)
     {
-        /*Wair for UIF*/
-        while(!(TIM2->SR & SR_UIF)){}
+        // /*Wair for UIF*/
+        // while(!(TIM2->SR & SR_UIF)){}
 
-        /*Clear UIF*/
-        TIM2->SR &= ~SR_UIF;
+        // /*Clear UIF*/
+        // TIM2->SR &= ~SR_UIF;
 
-        GPIOA->ODR ^= LEDPIN;
-        Serial.uart_write_string("1 second passed\n\r");
-       
+        // GPIOA->ODR ^= LEDPIN;
+        // Serial.uart_write_string("1 second passed\n\r");
     }
     
 

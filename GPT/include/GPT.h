@@ -9,6 +9,7 @@ class gpt
 {
     public:
     void init(void);
+    void OutputCompare(void);
 };
 
 #endif
